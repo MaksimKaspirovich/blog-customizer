@@ -16,10 +16,12 @@ import {
 
 import styles from './ArticleParamsForm.module.scss';
 
-
-export const ArticleParamsForm = ({onApply}: {
+interface ArticleParamsFormProps {
 	onApply: (state: ArticleStateType) => void;
-}) => {
+}
+
+
+export const ArticleParamsForm = ({onApply}: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState(false); //Управляем видимостью боковой панели, изначально false
 
 	const [formState, setFormState] = useState<ArticleStateType>(defaultArticleState); //Храним настройки статьи, по умолчанию defaulArticleState
@@ -47,8 +49,9 @@ export const ArticleParamsForm = ({onApply}: {
 					onClick={() => setIsOpen(false)}>
 				</div>
 			)}
-			<aside className={`${styles.container} ${isOpen ? styles.container_open : ''}`}>
-				<form className={styles.form} onSubmit={handleApply}>
+			<aside className={`${styles.container} ${isOpen ? styles.container_open : ''}`}
+			aria-hidden={!isOpen}>
+				<form className={styles.form} onSubmit={handleApply} onReset={handleReset}>
 					<h2 className={styles.title}>Задайте параметры</h2>
 					<div className={styles.formGroup}>
 						<Select
@@ -57,11 +60,8 @@ export const ArticleParamsForm = ({onApply}: {
 						selected={formState.fontFamilyOption}
 						onChange={(option) => 
 							setFormState({
+								...formState,
 								fontFamilyOption: option,
-								fontColor: formState.fontColor,
-								backgroundColor: formState.backgroundColor,
-								contentWidth: formState.contentWidth,
-								fontSizeOption: formState.fontSizeOption,
 							})
 						} />
 					</div>
@@ -73,10 +73,7 @@ export const ArticleParamsForm = ({onApply}: {
 							selected={formState.fontSizeOption}
 							onChange={(option) => {
 								setFormState({
-									fontFamilyOption: formState.fontFamilyOption,
-									fontColor: formState.fontColor,
-									backgroundColor: formState.backgroundColor,
-									contentWidth: formState.contentWidth,
+									...formState,
 									fontSizeOption: option,
 								})
 							}} />
@@ -88,11 +85,8 @@ export const ArticleParamsForm = ({onApply}: {
 						selected={formState.fontColor}
 						onChange={(option) => 
 							setFormState({
-								fontFamilyOption: formState.fontFamilyOption,
+								...formState,
 								fontColor: option,
-								backgroundColor: formState.backgroundColor,
-								contentWidth: formState.contentWidth,
-								fontSizeOption: formState.fontSizeOption,
 							})
 						} />
 					</div>
@@ -104,11 +98,8 @@ export const ArticleParamsForm = ({onApply}: {
 						selected={formState.backgroundColor}
 						onChange={(option) => 
 							setFormState({
-								fontFamilyOption: formState.backgroundColor,
-								fontColor: formState.fontColor,
+								...formState,
 								backgroundColor: option,
-								contentWidth: formState.contentWidth,
-								fontSizeOption: formState.fontSizeOption,
 							})
 						} />
 					</div>
@@ -119,11 +110,8 @@ export const ArticleParamsForm = ({onApply}: {
 						selected={formState.contentWidth}
 						onChange={(option) => 
 							setFormState({
-								fontFamilyOption: formState.fontFamilyOption,
-								fontColor: formState.fontColor,
-								backgroundColor: formState.backgroundColor,
+								...formState,
 								contentWidth: option,
-								fontSizeOption: formState.fontSizeOption,
 							})
 						} />
 					</div>
