@@ -20,23 +20,23 @@ import styles from './ArticleParamsForm.module.scss';
 export const ArticleParamsForm = ({onApply}: {
 	onApply: (state: ArticleStateType) => void;
 }) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false); //Управляем видимостью боковой панели, изначально false
 
-	const [formState, setFormState] = useState<ArticleStateType>(defaultArticleState);
+	const [formState, setFormState] = useState<ArticleStateType>(defaultArticleState); //Храним настройки статьи, по умолчанию defaulArticleState
 
 	const handleToggleSidebar = () => {
 		setIsOpen((prevState) => !prevState);
-	};
+	}; // Отвечает за открытие/закрытие бокового меню
 
 	const handleReset = () => {
 		setFormState(defaultArticleState)
-	};
+	}; //Сбрасывает настройки
 
 	const handleApply = (e: FormEvent) => {
 		e.preventDefault();
 		onApply(formState);
 		setIsOpen(false);
-	};
+	}; //Применяет настройки, которые выбрал пользователь и закрывает панель
 
 	return (
 		<>

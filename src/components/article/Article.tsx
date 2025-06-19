@@ -48,4 +48,3 @@ export const Article = () => {
 		</article>
 	);
 };
-a
