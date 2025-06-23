@@ -4,6 +4,7 @@ import { Button } from '../../ui/button/Button';
 import { RadioGroup } from '../../ui/radio-group/RadioGroup';
 import { Select } from '../../ui/select/Select';
 import { Separator } from '../../ui/separator/Separator';
+import { Text } from 'src/ui/text';
 import {
 	ArticleStateType,
 	backgroundColors,
@@ -13,6 +14,7 @@ import {
 	fontSizeOptions,
 	defaultArticleState,
 } from '../../constants/articleProps';
+import clsx from 'clsx';
 
 import styles from './ArticleParamsForm.module.scss';
 
@@ -22,12 +24,12 @@ interface ArticleParamsFormProps {
 
 
 export const ArticleParamsForm = ({onApply}: ArticleParamsFormProps) => {
-	const [isOpen, setIsOpen] = useState(false); //Управляем видимостью боковой панели, изначально false
+	const [isMenuOpen, setIsMenuOpen] = useState(false); //Управляем видимостью боковой панели, изначально false
 
 	const [formState, setFormState] = useState<ArticleStateType>(defaultArticleState); //Храним настройки статьи, по умолчанию defaulArticleState
 
 	const handleToggleSidebar = () => {
-		setIsOpen((prevState) => !prevState);
+		setIsMenuOpen((prevState) => !prevState);
 	}; // Отвечает за открытие/закрытие бокового меню
 
 	const handleReset = () => {
@@ -37,22 +39,22 @@ export const ArticleParamsForm = ({onApply}: ArticleParamsFormProps) => {
 	const handleApply = (e: FormEvent) => {
 		e.preventDefault();
 		onApply(formState);
-		setIsOpen(false);
+		setIsMenuOpen(false);
 	}; //Применяет настройки, которые выбрал пользователь и закрывает панель
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={handleToggleSidebar} />
-			{isOpen && (
+			<ArrowButton isOpen={isMenuOpen} onClick={handleToggleSidebar} />
+			{isMenuOpen && (
 				<div
 					className={styles.overlay}
-					onClick={() => setIsOpen(false)}>
+					onClick={() => setIsMenuOpen(false)}>
 				</div>
 			)}
-			<aside className={`${styles.container} ${isOpen ? styles.container_open : ''}`}
-			aria-hidden={!isOpen}>
+			<aside className={clsx(styles.container, isMenuOpen && styles.container_open)}
+			aria-hidden={!isMenuOpen}>
 				<form className={styles.form} onSubmit={handleApply} onReset={handleReset}>
-					<h2 className={styles.title}>Задайте параметры</h2>
+					<Text as="h2" size={31} weight={800} uppercase align='left'>Задайте параметры</Text>
 					<div className={styles.formGroup}>
 						<Select
 						title='Шрифт'
